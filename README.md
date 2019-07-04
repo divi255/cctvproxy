@@ -21,7 +21,9 @@ cctv-proxy.sh start
 
 ## Usage
 
-*http://cctv-proxy-ip:port/ci?_id=CAM_ID&.....*
+```
+http://cctv-proxy-ip:port/ci?_id=CAM_ID&.....
+```
 
 Params:
 
