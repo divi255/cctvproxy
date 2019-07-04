@@ -1,0 +1,2 @@
+include cctvproxy/nocam.jpg
+include cctvproxy/cctv_proxy.dist.yml
