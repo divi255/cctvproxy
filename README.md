@@ -1,6 +1,6 @@
-#### CCTV camera image proxy
+# CCTV camera image proxy
 
-### What's that
+## What's that
 
 You have CCTV camera which gives you image snapshot and want to add it
 somewhere e.g. to your internal web page, refreshing periodically.
@@ -19,7 +19,21 @@ pip3 install cctvproxy
 cctv-proxy.sh start
 ```
 
-### Config file
+## Usage
+
+*http://cctv-proxy-ip:port/ci?_id=CAM_ID&.....*
+
+Params:
+
+* **_id** camera id
+* **_return** if "raw" - return raw response from camera, if "test" - test
+  camera and return OK (or FAILED)
+
+All other params are passed to CCTV camera as-is.
+
+CCTV Proxy was made for AXIS cameras but you can configure it for almost any.
+
+## Config file
 
 Default config file should be located at */usr/local/etc/cctv-proxy.yml*
 
@@ -45,3 +59,14 @@ timeout: 5
 # if no image available
 #no-image: /data/nocam.jpg
 ```
+
+## Debug
+
+```bash
+python3 -m cctvproxy.proxy [-f config_file] -D
+```
+
+## TODO
+
+Image processing. Sometime later. I don't need it - [EVA
+ICS](https://www.eva-ics.com/) has built-in.
