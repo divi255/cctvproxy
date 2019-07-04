@@ -4,7 +4,7 @@
 __author__ = 'Sergei S. https://makeitwork.cz'
 __copyright__ = '(c)'
 __license__ = 'MIT'
-__version__ = '0.0.2'
+__version__ = '0.1.1'
 
 import cherrypy
 import requests
@@ -19,6 +19,11 @@ default_timeout = 5
 
 logger = logging.getLogger('cctv-proxy')
 
+try:
+    yaml.warnings({'YAMLLoadWarning': False})
+except:
+    pass
+
 
 class CCTVProxy:
 
@@ -26,6 +31,7 @@ class CCTVProxy:
         self.config = config
         dir_me = os.path.realpath(os.path.dirname(os.path.realpath(__file__)))
         self.nocam = config.get('nocam', dir_me + '/nocam.jpg')
+        self.debug = False
 
     @cherrypy.expose
     def ci(self, **kwargs):
@@ -68,12 +74,13 @@ class CCTVProxy:
                 url,
                 params=kwargs,
                 timeout=self.config.get('timeout', default_timeout),
-                *opts)
+                **opts)
             if not result.ok:
                 if ret == 'raw':
                     cherrypy.serving.response.status = result.status_code
                 else:
-                    raise Exception
+                    raise Exception('Camera HTTP code {}'.format(
+                        result.status_code))
             self._log(url)
             if ret == 'test':
                 return 'OK'
@@ -81,6 +88,9 @@ class CCTVProxy:
                 cherrypy.serving.response.headers['Content-Type'] = 'image/jpeg'
                 return result.content
         except Exception as e:
+            if self.debug:
+                import traceback
+                print(traceback.format_exc())
             self._log(url + ' - FAILED')
             if ret == 'raw':
                 raise cherrypy.HTTPError(message=str(e))
@@ -107,7 +117,7 @@ def main():
         '-f',
         '--config-file',
         help='Configuration file',
-        default='/usr/local/etc/cctv-proxy.yml')
+        default='/usr/local/etc/cctv_proxy.yml')
 
     try:
         import argcomplete
@@ -140,6 +150,8 @@ def main():
 
     W = CCTVProxy(config)
 
+    W.debug = a.debug
+
     cherrypy.tree.mount(W, '/')
 
     my_uid = pwd.getpwnam(config.get('user', 'nobody')).pw_uid
@@ -148,9 +160,11 @@ def main():
 
     my_gid = grp.getgrnam(config.get('group', 'nogroup')).gr_gid
 
-    pid_file = config.get('pid', '/tmp/cctv-proxy.pid')
+    pid_file = config.get('pid', '/tmp/cctv_proxy.pid')
 
     open(pid_file, 'w').write(str(os.getpid()))
+
+    cherrypy.engine.start()
 
     if my_uid != os.getuid():
         try:
@@ -159,7 +173,6 @@ def main():
         except:
             logging.warning('Can not set UID/GID on process')
 
-    cherrypy.engine.start()
     cherrypy.engine.block()
 
 

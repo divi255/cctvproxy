@@ -1,4 +1,4 @@
-__version__ = '0.0.2'
+__version__ = '0.1.1'
 
 import setuptools
 
@@ -20,8 +20,8 @@ setuptools.setup(
     scripts=['cctv-proxy.sh'],
     include_package_data=True,
     classifiers=(
-        "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: MIT",
-        "Topic :: Communications",
+        'Programming Language :: Python :: 3',
+        'License :: OSI Approved :: MIT License',
+        'Topic :: Communications',
     ),
 )

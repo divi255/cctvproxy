@@ -2,7 +2,7 @@
 
 [ "x$PYTHON3" = "x" ] && PYTHON3=python3
 
-CONFIG=/usr/local/etc/cctv-proxy.yml
+CONFIG=/usr/local/etc/cctv_proxy.yml
 
 while [ $1 ]; do
   key="$1"
@@ -31,7 +31,7 @@ fi
 PIDFILE=`grep ^pid:\  ${CONFIG} |awk '{ print $1 }'`
 
 if [ "x${PIDFILE}" = "x" ]; then
-  PIDFILE=/tmp/cctv-proxy.pid
+  PIDFILE=/tmp/cctv_proxy.pid
 fi
 
 case $CMD in

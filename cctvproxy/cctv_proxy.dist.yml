@@ -13,6 +13,6 @@ timeout: 5
 #user: nobody
 #group: nogroup
 # change for each instance
-#pid: /tmp/cctv-proxy.pid
+#pid: /tmp/cctv_proxy.pid
 # if no image available
 #no-image: /data/nocam.jpg

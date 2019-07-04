@@ -37,7 +37,7 @@ CCTV Proxy was made for AXIS cameras but you can configure it for almost any.
 
 ## Config file
 
-Default config file should be located at */usr/local/etc/cctv-proxy.yml*
+Default config file path: */usr/local/etc/cctv_proxy.yml*
 
 You can specify alternative location with *-f* option.
 
@@ -62,9 +62,13 @@ timeout: 5
 #no-image: /data/nocam.jpg
 ```
 
+Don't forget to set 600 permissions on a config file.
+
 ## Debug
 
 ```bash
+cctv-proxy.sh launch [-f config_file]
+# or
 python3 -m cctvproxy.proxy [-f config_file] -D
 ```
 
